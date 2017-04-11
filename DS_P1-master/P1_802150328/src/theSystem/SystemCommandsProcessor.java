@@ -23,7 +23,7 @@ import diskUtilities.DiskUtils;
 
 
 /**
- * 
+ * Class that implements the system commands in the shell.
  * @author Pedro I. Rivera-Vega
  *
  */
@@ -135,7 +135,7 @@ public class SystemCommandsProcessor extends CommandProcessor {
 
 			resultsList = new ArrayList<String>(); 
 			FixedLengthCommand fc = (FixedLengthCommand) c;
-			String name = fc.getOperand(1);
+			String name = fc.getOperand(1); // name of the file to delete
 			
 			DiskManager.deleteDiskUnit(name);
 			
@@ -159,7 +159,7 @@ public class SystemCommandsProcessor extends CommandProcessor {
 	}
 	/**
 	 * Processor that mounts a disk and makes it the current working disk
-	 * @author francisco
+	 * @author Francisco Diaz
 	 *
 	 */
 	private class MountProcessor implements CommandActionHandler { 
@@ -176,14 +176,12 @@ public class SystemCommandsProcessor extends CommandProcessor {
 	/**
 	 * Unmount's the current working disk
 	 * @author Francisco Diaz
-	 *
 	 */
 	private class UnmountProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
 			resultsList = new ArrayList<String>(); 
 			DiskManager.unmountDisk();
-			
 			return resultsList; 
 		}
 	}
@@ -236,7 +234,7 @@ public class SystemCommandsProcessor extends CommandProcessor {
 	}
 	/**
 	 * Displays the internal content of a disk
-	 * @author francisco
+	 * @author Francisco Diaz
 	 *
 	 */
 	private class CatProcessor implements CommandActionHandler { 
@@ -265,13 +263,10 @@ public class SystemCommandsProcessor extends CommandProcessor {
 		}
 	}
 	
-	//////////////////////////////////////////////////////////////////////
-	//////////////////////////////////////////////////////////////////////
-
 	
 	/**
-	 * 
-	 * @return
+	 * Method that shutdowns the command line
+	 * @return command to the execution
 	 */
 	public boolean inShutdownMode() {
 		return stopExecution;

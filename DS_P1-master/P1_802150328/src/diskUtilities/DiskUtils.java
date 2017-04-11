@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * @author pedroirivera-vega
  */
 public class DiskUtils {
+	// Defualt Size of an integer in bytes
 	public static final int INTSIZE = 4; 
 	
 	/**

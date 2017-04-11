@@ -200,7 +200,7 @@ public class DiskManager {
 			return;
 		}
 		try {
-			FileLoaderAndManager.loadFile(extFile, newFile);
+			FileLoaderAndManager.load(extFile, newFile);
 		} catch (FullDiskException e) {
 			return;
 		}

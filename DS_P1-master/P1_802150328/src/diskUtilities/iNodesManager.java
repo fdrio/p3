@@ -85,7 +85,7 @@ public class iNodesManager {
 	 * @param iNodeIndex Index of the INode to modify
 	 * @param sizeValue Size of the file which the i-node makes reference to.
 	 */
-	public static void setSizeIntoINode(DiskUnit d, int iNodeIndex, int sizeValue) {
+	public static void setSizeOfINode(DiskUnit d, int iNodeIndex, int sizeValue) {
 		
 		int blockSize = d.getBlockSize();
 		ArrayList<Integer> iNodeInfo = getINodePos(iNodeIndex, blockSize);

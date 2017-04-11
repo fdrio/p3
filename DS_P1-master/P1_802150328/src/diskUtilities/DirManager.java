@@ -37,9 +37,10 @@ public class DirManager {
 	/**
 	 * Creates the DiskNames text file. This file stores the name of the 
 	 * DiskUnits created. 
-	 * @return Returns true if the file was created.
+	 * @return Returns true if and only if the file was successfully created in the File System
 	 */
 	private static boolean createDiskNamesFile() {
+		//                        Parent Path   File Name
 		File diskName = new File("DiskUnits", "DiskNames.txt");
 		// if the file does not exist, return true
 		try {
@@ -112,12 +113,6 @@ public class DirManager {
 			e.printStackTrace();
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
+
 	
 }

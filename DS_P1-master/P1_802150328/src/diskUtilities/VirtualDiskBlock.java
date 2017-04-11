@@ -1,6 +1,6 @@
 package diskUtilities;
 
-import diskUnitExceptions.*;
+import diskExceptions.*;
 
 public class VirtualDiskBlock {
 	

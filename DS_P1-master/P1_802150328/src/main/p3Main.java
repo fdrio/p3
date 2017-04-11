@@ -1,7 +1,7 @@
 /**
  * 
  */
-package theSystem;
+package main;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import systemGeneralClasses.SystemController;
  * @author Pedro I. Rivera-Vega
  *
  */
-public class MySystem {
+public class p3Main {
 
 	/**
 	 * @param args
@@ -20,8 +20,8 @@ public class MySystem {
 	public static void main(String[] args) throws IOException  {
 		
 		// Initialing Shell
-		DirectoryManager.createDiskDirectory(); // Creates the DiskUnit directory
-		DirectoryManager.getDiskUnitNames();    // Place in memory the names of the already created DiskUnits
+		DirManager.createDiskDirectory(); // Creates the DiskUnit directory
+		DirManager.getDiskUnitNames();    // Place in memory the names of the already created DiskUnits
 		
 		// Processing commands
 		SystemController system = new SystemController(); 

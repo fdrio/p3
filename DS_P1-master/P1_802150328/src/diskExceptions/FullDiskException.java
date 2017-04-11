@@ -1,4 +1,4 @@
-package diskUnitExceptions;
+package diskExceptions;
 
 /**
  * Exception for the verifying if a disk is full.

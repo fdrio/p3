@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.ArrayList;
 
-import diskUnitExceptions.FullDiskException;
+import diskExceptions.FullDiskException;
 
-public class FileManager {
+public class FileLoaderAndManager {
 
 	/**
 	 * Attempts to read a new file into the current directory in the current 
@@ -63,7 +63,7 @@ public class FileManager {
 		} 
 	
 		// Block Number of the root directory
-		int rootBlockNum = INodeManager.getDataBlockFromINode(disk, 0);
+		int rootBlockNum = iNodesManager.getDataBlockFromINode(disk, 0);
 		// Verify if File already exists.
 		ArrayList<Integer> foundFile = findFileInDir(disk, file, rootBlockNum);
 		try {
@@ -72,9 +72,9 @@ public class FileManager {
 				int fileBytePos = foundFile.get(1);
 				// Get iNode reference to that file 
 				int iNodeRef = DiskUtils.getIntFromBlock(foundFileBlock, fileBytePos+20); // Reads the integer right after the filename, which is the iNode ref
-				int fileDataBlock = INodeManager.getDataBlockFromINode(disk, iNodeRef);  // Data block from the i-node
+				int fileDataBlock = iNodesManager.getDataBlockFromINode(disk, iNodeRef);  // Data block from the i-node
 				// Set size in of file into its i-node
-				INodeManager.setSizeIntoINode(disk, iNodeRef, rafSize);
+				iNodesManager.setSizeIntoINode(disk, iNodeRef, rafSize);
 				// Delete file from disk
 				deleteFileFromDisk(disk, fileDataBlock);
 				// Write new file in place of the older one
@@ -87,11 +87,11 @@ public class FileManager {
 				int iNodeRef = writeNewFileIntoDirectory(disk, file, rootBlockNum); // Returns the iNode reference.
 				// Enter the iNode and assign a free block
 				// Get free block number
-				int freeBN = FreeBlockManager.getFreeBN(disk);
+				int freeBN = BlockManager.getFreeBN(disk);
 				// Set data block in i-node to the free block 
-				INodeManager.setDataBlockToINode(disk, iNodeRef, freeBN);
+				iNodesManager.setDataBlockToINode(disk, iNodeRef, freeBN);
 				// Set size in of file into its i-node
-				INodeManager.setSizeIntoINode(disk,iNodeRef, rafSize);
+				iNodesManager.setSizeIntoINode(disk,iNodeRef, rafSize);
 				// Write file into the free block
 				writeNewFileIntoDisk(disk, freeBN, extFileArrayList);
 			}
@@ -115,7 +115,7 @@ public class FileManager {
 		// Mounted disk unit 
 		DiskUnit disk = DiskManager.mountedDiskUnit;
 		// Block Number of the root directory
-		int rootBlockNum = INodeManager.getDataBlockFromINode(disk, 0);
+		int rootBlockNum = iNodesManager.getDataBlockFromINode(disk, 0);
 		// Get input file from root
 		ArrayList<Integer> inputFileInfo = findFileInDir(disk, inputFile, rootBlockNum);
 		if (inputFileInfo == null || inputFileInfo.isEmpty()) {
@@ -126,8 +126,8 @@ public class FileManager {
 		int inputFileBytePos = inputFileInfo.get(1);   // Starting byte position of the file name
 		// Get data block from i-node
 		int inputINodeRef = DiskUtils.getIntFromBlock(vdb, inputFileBytePos+20);
-		int inputFileSize = INodeManager.getSizeFromINode(disk, inputINodeRef);
-		int inputFileDataBlock = INodeManager.getDataBlockFromINode(disk, inputINodeRef);
+		int inputFileSize = iNodesManager.getSizeFromINode(disk, inputINodeRef);
+		int inputFileDataBlock = iNodesManager.getDataBlockFromINode(disk, inputINodeRef);
 		
 		// Get content of input file
 		ArrayList<VirtualDiskBlock> content = DiskUtils.setFileContentToVDBs(disk, inputFileDataBlock);
@@ -142,9 +142,9 @@ public class FileManager {
 				int fileBytePos = foundFile.get(1);
 				// Get iNode reference to that file 
 				int iNodeRef = DiskUtils.getIntFromBlock(foundFileBlock, fileBytePos+20); // Reads the integer right after the filename, which is the iNode ref
-				int fileDataBlock = INodeManager.getDataBlockFromINode(disk, iNodeRef);  // Data block from the i-node
+				int fileDataBlock = iNodesManager.getDataBlockFromINode(disk, iNodeRef);  // Data block from the i-node
 				// Set size of file into its i-node
-				INodeManager.setSizeIntoINode(disk, iNodeRef, inputFileSize);
+				iNodesManager.setSizeIntoINode(disk, iNodeRef, inputFileSize);
 				// Delete file from disk
 				deleteFileFromDisk(disk, fileDataBlock);
 				// Write new file in place of the older one
@@ -157,11 +157,11 @@ public class FileManager {
 				int iNodeRef = writeNewFileIntoDirectory(disk, file, rootBlockNum); // Returns the iNode reference.
 				// Enter the iNode and assign a free block
 				// Get free block number
-				int freeBN = FreeBlockManager.getFreeBN(disk);
+				int freeBN = BlockManager.getFreeBN(disk);
 				// Set data block in i-node to the free block 
-				INodeManager.setDataBlockToINode(disk, iNodeRef, freeBN);
+				iNodesManager.setDataBlockToINode(disk, iNodeRef, freeBN);
 				// Set size in of file into its i-node
-				INodeManager.setSizeIntoINode(disk,iNodeRef, inputFileSize);
+				iNodesManager.setSizeIntoINode(disk,iNodeRef, inputFileSize);
 				// Write file into the free block
 				writeNewFileIntoDisk(disk, freeBN, content);
 			} 
@@ -184,7 +184,7 @@ public class FileManager {
 		System.out.println("Filename:           Size (Bytes)");
 		System.out.println("-------------------------------------");
 		// Block Number of the root directory
-		int rootBlockNum = INodeManager.getDataBlockFromINode(disk, 0);
+		int rootBlockNum = iNodesManager.getDataBlockFromINode(disk, 0);
 		printFilesFromDir(disk, rootBlockNum); // Print the filenames with the sizes
 		
 		System.out.println();
@@ -200,7 +200,7 @@ public class FileManager {
 		// Mounted disk unit 
 		DiskUnit disk = DiskManager.mountedDiskUnit;
 		// Block Number of the root directory
-		int rootBlockNum = INodeManager.getDataBlockFromINode(disk, 0);
+		int rootBlockNum = iNodesManager.getDataBlockFromINode(disk, 0);
 		// Get file from root
 		ArrayList<Integer> fileInfo = findFileInDir(disk, file, rootBlockNum);
 		if (fileInfo == null || fileInfo.isEmpty()) {
@@ -211,7 +211,7 @@ public class FileManager {
 		int fileBytePos = fileInfo.get(1);   // Starting byte position of the file name
 		// Get data block from i-node
 		int iNodeRef = DiskUtils.getIntFromBlock(vdb, fileBytePos+20);
-		int fileDataBlock = INodeManager.getDataBlockFromINode(disk, iNodeRef);
+		int fileDataBlock = iNodesManager.getDataBlockFromINode(disk, iNodeRef);
 		
 		// Get content from file
 		ArrayList<VirtualDiskBlock> content = DiskUtils.setFileContentToVDBs(disk, fileDataBlock);
@@ -248,7 +248,7 @@ public class FileManager {
 		}
 		if (freeDirArray.isEmpty()) {
 			try{
-				int nextFreeBlock = FreeBlockManager.getFreeBN(d);
+				int nextFreeBlock = BlockManager.getFreeBN(d);
 				DiskUtils.copyIntToBlock(lastDataBlock, usableBytes, nextFreeBlock); // Copy new data block into last 4 bytes
 				d.write(blockNum, lastDataBlock); 	// Write the next block number into the block on the disk
 				freeDirArray.add(nextFreeBlock); 	// Block number to write into
@@ -340,7 +340,7 @@ public class FileManager {
 			}
 			String filename = new String(fileCharArray);
 			int iNodeRef = DiskUtils.getIntFromBlock(vdb, fileBytePos+20);
-			String filesize = Integer.toString(INodeManager.getSizeFromINode(d, iNodeRef));
+			String filesize = Integer.toString(iNodesManager.getSizeFromINode(d, iNodeRef));
 			filename += " "+filesize;
 			filesInDir.add(filename);
 			
@@ -406,7 +406,7 @@ public class FileManager {
 		// Obtain free i-node index
 		int iNodeRef;
 		try {
-			iNodeRef = INodeManager.getFreeINode(d);
+			iNodeRef = iNodesManager.getFreeINode(d);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			throw new FullDiskException();  // Could not get more i-node
@@ -465,7 +465,7 @@ public class FileManager {
 			if (vdbArray.size() == 1)
 				nextFreeBlock = 0;
 			else
-				nextFreeBlock = FreeBlockManager.getFreeBN(d); // Look for a free block
+				nextFreeBlock = BlockManager.getFreeBN(d); // Look for a free block
 			DiskUtils.copyIntToBlock(vdb, vdb.getCapacity()-4, nextFreeBlock);  // Write free block number into last 4-bytes of block
 			d.write(firstFreeBlock, vdb);   // Write virtual disk block into disk 
 
@@ -475,7 +475,7 @@ public class FileManager {
 				if (i == vdbArray.size()-1)
 					nextFreeBlock = 0;
 				else
-					nextFreeBlock = FreeBlockManager.getFreeBN(d);  // Look for a free block
+					nextFreeBlock = BlockManager.getFreeBN(d);  // Look for a free block
 				DiskUtils.copyIntToBlock(vdb, vdb.getCapacity()-4, nextFreeBlock);  // Write free block number into last 4-bytes of block
 				d.write(freeBlock, vdb);  // Write virtual disk block into disk 
 			}
@@ -501,7 +501,7 @@ public class FileManager {
 			VirtualDiskBlock vdb = DiskUtils.copyBlockToVDB(d, blockNum);
 			clearDiskBlock(d, blockNum, vdb);         // Clear the block
 			if (i != 0) // Doesn't register the firstFreeBlock into free blocks
-				FreeBlockManager.registerFB(d, blockNum); // register free block to the free block collection.
+				BlockManager.registerFB(d, blockNum); // register free block to the free block collection.
 		}
 	}
 	/**

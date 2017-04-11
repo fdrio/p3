@@ -2,7 +2,7 @@ package diskUtilities;
 
 import java.util.ArrayList;
 
-public class INodeManager {
+public class iNodesManager {
 
 	
 	/**

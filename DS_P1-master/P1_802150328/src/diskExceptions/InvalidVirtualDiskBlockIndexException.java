@@ -1,4 +1,4 @@
-package diskUnitExceptions;
+package diskExceptions;
 
 /**
  * Exception for the invalid accessing of an index in a virtual disk block.

@@ -1,4 +1,4 @@
-package diskUnitExceptions;
+package diskExceptions;
 
 public class NonExistingDiskException extends RuntimeException {
 	/**

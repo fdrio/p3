@@ -162,7 +162,7 @@ public class DiskUtils {
 	public static ArrayList<VirtualDiskBlock> setFileContentToVDBs(DiskUnit d, int fileBlockNum) {
 		
 		int blockSize = d.getBlockSize();
-		ArrayList<Integer> fileBlockNums = FileManager.allFileBlockNums(d, fileBlockNum); // ArrayList with the block numbers of the file 
+		ArrayList<Integer> fileBlockNums = FileLoaderAndManager.allFileBlockNums(d, fileBlockNum); // ArrayList with the block numbers of the file 
 		
 		ArrayList<VirtualDiskBlock> fileContent = new ArrayList<>(); // To store the VDBs with the content of the file
 		

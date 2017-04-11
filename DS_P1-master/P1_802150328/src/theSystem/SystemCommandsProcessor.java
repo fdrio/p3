@@ -2,9 +2,9 @@ package theSystem;
 
 import java.util.ArrayList;
 
-import diskUnitExceptions.ExistingDiskException;
-import diskUnitExceptions.FullDiskException;
-import diskUnitExceptions.InvalidParameterException;
+import diskExceptions.ExistingDiskException;
+import diskExceptions.FullDiskException;
+import diskExceptions.InvalidParameterException;
 import operandHandlers.OperandValidatorUtils;
 import lists.DLDHDTList;
 import lists.LLIndexList1;

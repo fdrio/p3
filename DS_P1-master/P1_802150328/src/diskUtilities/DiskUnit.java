@@ -1,11 +1,11 @@
 package diskUtilities;
-import diskUnitExceptions.*;
-
 import java.io.*;
 
+import diskExceptions.*;
 
 
-public class DiskUnit implements DiskUnitInterface{
+
+public class DiskUnit {
 
 	private static final int DEFAULT_CAPACITY = 1024;  // default number of blocks 	
 	private static final int DEFAULT_BLOCK_SIZE = 256; // default number of bytes per block
@@ -212,7 +212,7 @@ public class DiskUnit implements DiskUnitInterface{
 	}
 
 	
-	@Override
+	
 	public void write(int blockNum, VirtualDiskBlock b) throws InvalidBlockNumberException, InvalidBlockException {
 		
 		try {
@@ -236,7 +236,7 @@ public class DiskUnit implements DiskUnitInterface{
 		
 	}
 
-	@Override
+	
 	public void read(int blockNum, VirtualDiskBlock b) throws InvalidBlockNumberException, InvalidBlockException {
 		
 		try {
@@ -259,7 +259,7 @@ public class DiskUnit implements DiskUnitInterface{
 		} 	
 	}
 
-	@Override
+	
 	public int getCapacity() {
 		try {
 			disk.seek(0);
@@ -271,7 +271,7 @@ public class DiskUnit implements DiskUnitInterface{
 
 	}
 
-	@Override
+	
 	public int getBlockSize() {
 		try {
 			disk.seek(4);
@@ -374,7 +374,7 @@ public class DiskUnit implements DiskUnitInterface{
 		return -1;
 	}
 
-	@Override
+	
 	public void lowLevelFormat() {
 		
 		VirtualDiskBlock vdb = new VirtualDiskBlock(blockSize);
@@ -387,7 +387,7 @@ public class DiskUnit implements DiskUnitInterface{
 		
 	}
 
-	@Override
+	
 	/** Simulates shutting-off the disk. Just closes the corresponding RAF. **/
 	public void shutdown() {
 		try {

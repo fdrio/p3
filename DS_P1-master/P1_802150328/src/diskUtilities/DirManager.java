@@ -7,7 +7,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class DirectoryManager {
+public class DirManager {
 		
 	/**
 	 * Creates the DiskUnit directory. This directory stores all the RAF files

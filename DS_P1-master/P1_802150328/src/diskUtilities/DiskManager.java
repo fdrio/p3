@@ -8,10 +8,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import diskUnitExceptions.ExistingDiskException;
-import diskUnitExceptions.FullDiskException;
-import diskUnitExceptions.InvalidParameterException;
-import diskUnitExceptions.NonExistingDiskException;
+import diskExceptions.ExistingDiskException;
+import diskExceptions.FullDiskException;
+import diskExceptions.InvalidParameterException;
+import diskExceptions.NonExistingDiskException;
 
 public class DiskManager {
 	/**
@@ -39,10 +39,10 @@ public class DiskManager {
 		//TODO: create DiskNames text file if doesn't exist
 		
 		// Verifying DiskUnit folder exists and add Unit to DiskNames text file
-		DirectoryManager.createDiskDirectory();	
+		DirManager.createDiskDirectory();	
 		try {
 			DiskUnit.createDiskUnit(name, capacity, blockSize);
-			DirectoryManager.addUnitToDiskNames(name);
+			DirManager.addUnitToDiskNames(name);
 		} catch (ExistingDiskException e) {
 			throw new ExistingDiskException();
 		}
@@ -63,7 +63,7 @@ public class DiskManager {
 	 * @param d DiskUnit to initialize its free blocks (all data blocks)
 	 */
 	private static void initializeFreeBlocks(DiskUnit d) {
-		FreeBlockManager.initializeFreeBlocks(d);
+		BlockManager.initializeFreeBlocks(d);
 	}
 	
 	/**
@@ -104,7 +104,7 @@ public class DiskManager {
 		}
 		System.out.println(name+" has been removed.");
 		unitToDelete.delete();
-		DirectoryManager.removeUnitFromDiskNames(name);
+		DirManager.removeUnitFromDiskNames(name);
 		
 	}
 	
@@ -200,7 +200,7 @@ public class DiskManager {
 			return;
 		}
 		try {
-			FileManager.loadFile(extFile, newFile);
+			FileLoaderAndManager.loadFile(extFile, newFile);
 		} catch (FullDiskException e) {
 			return;
 		}
@@ -217,7 +217,7 @@ public class DiskManager {
 			System.out.println("Cannot list directory. No disk is mounted.");
 			return;
 		}
-		FileManager.listDir();
+		FileLoaderAndManager.listDir();
 	}
 	/**
 	 * Displays the contents of a file in the current directory.
@@ -228,7 +228,7 @@ public class DiskManager {
 			System.out.println("Cannot display file. No disk is mounted.");
 			return;
 		}
-		FileManager.catFile(file);
+		FileLoaderAndManager.catFile(file);
 	}
 	/**
 	 * Copies one internal file to another internal file. It works similar to the 
@@ -243,7 +243,7 @@ public class DiskManager {
 			return;
 		}
 		try {
-			FileManager.copyFile(inputFile, file);
+			FileLoaderAndManager.copyFile(inputFile, file);
 		} catch (FullDiskException e) {
 			return;
 		}

@@ -1,4 +1,4 @@
-package diskUnitExceptions;
+package diskExceptions;
 
 /**
  * Exception for the verification of the existence of a disk instance.

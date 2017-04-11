@@ -3,7 +3,7 @@ package diskUtilities;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 
-import diskUnitExceptions.FullDiskException;
+import diskExceptions.FullDiskException;
 
 /**
  * Class for managing the free disk blocks in the unit.
@@ -11,7 +11,7 @@ import diskUnitExceptions.FullDiskException;
  * @author jahdiel
  *
  */
-public class FreeBlockManager {
+public class BlockManager {
 	
 	private final int INTEGERS_IN_BLOCK; // Amount of integers that fit inside a block, each of 4 bytes
 	
@@ -24,7 +24,7 @@ public class FreeBlockManager {
 	 * Constructor - Sets the disk unit to work with.
 	 * @param d DiskUnit to manage.
 	 */
-	public FreeBlockManager(DiskUnit d) {
+	public BlockManager(DiskUnit d) {
 		disk = d;
 		firstFLB = d.getFirstDataBlock();
 		flIndex = d.getNextFreeBlock();

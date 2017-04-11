@@ -7,3 +7,7 @@
 /FreeBlockManager.class
 /INodeManager.class
 /VirtualDiskBlock.class
+/DirManager.class
+/FileLoaderAndManager.class
+/BlockManager.class
+/iNodesManager.class

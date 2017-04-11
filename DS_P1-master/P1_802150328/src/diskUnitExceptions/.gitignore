@@ -1,0 +1,7 @@
+/ExistingDiskException.class
+/FullDiskException.class
+/InvalidBlockException.class
+/InvalidBlockNumberException.class
+/InvalidParameterException.class
+/InvalidVirtualDiskBlockIndexException.class
+/NonExistingDiskException.class

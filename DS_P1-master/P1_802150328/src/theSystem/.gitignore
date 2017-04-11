@@ -1,0 +1,17 @@
+/IOCommandsProcessor$ExitProcessor.class
+/IOCommandsProcessor$NextProcessor.class
+/IOCommandsProcessor$PrevProcessor.class
+/IOCommandsProcessor$SetRowsProcessor.class
+/IOCommandsProcessor.class
+/MySystem.class
+/SystemCommandsProcessor$CopyFileProcessor.class
+/SystemCommandsProcessor$CreateDiskProcessor.class
+/SystemCommandsProcessor$DeleteDiskProcessor.class
+/SystemCommandsProcessor$DisplayInternalFileProcessor.class
+/SystemCommandsProcessor$ListDirectoryProcessor.class
+/SystemCommandsProcessor$LoadFileProcessor.class
+/SystemCommandsProcessor$MountDiskProcessor.class
+/SystemCommandsProcessor$ShowDisksProcessor.class
+/SystemCommandsProcessor$ShutDownProcessor.class
+/SystemCommandsProcessor$UnmountDiskProcessor.class
+/SystemCommandsProcessor.class

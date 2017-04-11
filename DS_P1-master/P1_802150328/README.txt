@@ -4,9 +4,10 @@ CIIC 4020 - Data Structures
 ------------------
 Project Author
 ------------------
-+ Jahdiel Alvarez
++ Francisco Diaz
 + 802-15-0328
 + Inst. Kelvin Roche
++ Prof. Pedro Rivera
 
 ==============================================
 ------------------
@@ -34,7 +35,7 @@ Instructions for Eclipse:
 + First unzip the file: P2_4035_802150328_162.zip
 + Open the project in Eclipse.
 + Make sure the Eclipse encoding is set to UTF-8.	
-+ Run MySystem.java file inside the theSystem package.
++ Run p3Main.java file inside the main package.
   
 ================================================
 -------------------------------
@@ -44,8 +45,8 @@ Instructions for Terminal
 + Enter the file in which the project is stored.
 + On Windows use the dir command and MacOS or Linux use ls command to verify you are in the correct file.
 + Once inside the project file, compile the java files:
-	>>>javac -d src -sourcepath src src/MySystem/MySystem.java
+	>>>javac -d src -sourcepath src src/main/p3Main.java
 	
 + Run the java class files using one of either commands, depending on the situation:
-	>>>java -classpath src theSystem.MySytem
+	>>>java -classpath src main.p3Main
 

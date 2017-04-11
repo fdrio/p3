@@ -3,7 +3,7 @@ package diskExceptions;
 /**
  * Exception for the verifying if a disk is full.
  * Is thrown when the disk has no more available space.
- * @author jahdiel.alvarez
+ * @author Francisco Diaz
  *
  */
 public class FullDiskException extends RuntimeException {

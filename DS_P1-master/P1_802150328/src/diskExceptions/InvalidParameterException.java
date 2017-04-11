@@ -1,5 +1,9 @@
 package diskExceptions;
-
+/**
+ * Exception for an Invalid Parameter
+ * @author Francisco Diaz
+ *
+ */
 public class InvalidParameterException extends RuntimeException {
 	/**
 	 * Exception for the verification of the proper properties

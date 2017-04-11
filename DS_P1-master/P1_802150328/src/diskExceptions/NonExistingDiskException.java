@@ -1,5 +1,9 @@
 package diskExceptions;
-
+/**
+ * Exception for a disk that does not exist in the file system
+ * @author Francisco Diaz
+ *
+ */
 public class NonExistingDiskException extends RuntimeException {
 	/**
 	 * Exception for the verification of the non existence of a disk instance.

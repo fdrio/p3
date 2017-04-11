@@ -3,7 +3,7 @@ package diskExceptions;
 /**
  * Exception for the verification of the existence of a disk instance.
  * Is thrown when the disk already exists.
- * @author jahdiel.alvarez
+ * @author Francisco Diaz
  *
  */
 public class ExistingDiskException extends RuntimeException {

@@ -1,5 +1,9 @@
 package diskExceptions;
-
+/**
+ * Exception for an invalid block number 
+ * @author Francisco Diaz 
+ *
+ */
 public class InvalidBlockNumberException extends RuntimeException {
 	/**
 	 * Exception thrown when block number is not within the accepted range. 

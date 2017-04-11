@@ -1,5 +1,9 @@
 package diskExceptions;
-
+/**
+ * Exception for an Invalid Block 
+ * @author Francisco Diaz 
+ *
+ */
 public class InvalidBlockException extends RuntimeException {
 	/**
 	 * Exception thrown when a blocks properties are not valid.

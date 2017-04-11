@@ -2,7 +2,7 @@ package diskExceptions;
 
 /**
  * Exception for the invalid accessing of an index in a virtual disk block.
- * @author jahdiel.alvarez
+ * @author Francisco Diaz
  *
  */
 public class InvalidVirtualDiskBlockIndexException extends RuntimeException {

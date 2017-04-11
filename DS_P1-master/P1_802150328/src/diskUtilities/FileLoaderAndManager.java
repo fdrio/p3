@@ -454,7 +454,7 @@ public class FileLoaderAndManager {
 	 */
 	private static void writeNewFileInDisk(DiskUnit disk, int firstFB, ArrayList<VirtualDiskBlock> listOfVDB) {
 		try {
-			if (listOfVDB.size() < 1) {
+			if (listOfVDB.size() < 1) { // Is full
 				System.out.println("Content could not be extracted!");
 				return;
 			}

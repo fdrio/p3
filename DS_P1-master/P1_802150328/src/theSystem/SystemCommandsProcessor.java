@@ -28,10 +28,7 @@ import diskUtilities.DiskManager;
 public class SystemCommandsProcessor extends CommandProcessor { 
 	
 	
-	//NOTE: The HelpProcessor is inherited...
-
-	// To initially place all lines for the output produced after a 
-	// command is entered. The results depend on the particular command. 
+	
 	private ArrayList<String> resultsList; 
 	
 	SystemCommand attemptedSC; 
@@ -43,12 +40,7 @@ public class SystemCommandsProcessor extends CommandProcessor {
 	// Is set to true when in the "administrator" state the command
 	// "shutdown" is given to the system.
 	
-	////////////////////////////////////////////////////////////////
-	// The following are references to objects needed for management 
-	// of data as required by the particular actions of the command-set..
-	// The following represents the object that will be capable of
-	// managing the different lists that are created by the system
-	// to be implemented as a lab exercise. 
+	
 	private ListsManager listsManager = new ListsManager(); 
 
 	/**
@@ -70,27 +62,16 @@ public class SystemCommandsProcessor extends CommandProcessor {
 		// accepts in other instances...... 
 		createCommandList(1);    // only 1 state -- GENERALSTATE
 
-		// commands for the state GENERALSTATE
-		
-		// the following are for the different commands that are accepted by
-		// the shell-like system that manage lists of integers
-		
-		// the command to create a new list is treated here as a command of variable length
-		// as in the case of command testoutput, it is done so just to illustrate... And
-		// again, all commands can be treated as of variable length command... 
-		// One need to make sure that the corresponding CommandActionHandler object
-		// is also working (in execute method) accordingly. See the documentation inside
-		// the CommandActionHandler class for testoutput command.
 		
 		// the following commands are treated as fixed length commands...
 		add(GENERALSTATE, SystemCommand.getFLSC("createdisk name int int", new CreateDiskProcessor())); 		
 		add(GENERALSTATE, SystemCommand.getFLSC("deletedisk name", new DeleteDiskProcessor()));
-		add(GENERALSTATE, SystemCommand.getFLSC("mount name", new MountDiskProcessor()));
-		add(GENERALSTATE, SystemCommand.getFLSC("unmount", new UnmountDiskProcessor()));
-		add(GENERALSTATE, SystemCommand.getFLSC("loadfile name name", new LoadFileProcessor()));
-		add(GENERALSTATE, SystemCommand.getFLSC("cp name name", new CopyFileProcessor()));
-		add(GENERALSTATE, SystemCommand.getFLSC("ls", new ListDirectoryProcessor()));
-		add(GENERALSTATE, SystemCommand.getFLSC("cat name", new DisplayInternalFileProcessor()));
+		add(GENERALSTATE, SystemCommand.getFLSC("mount name", new MountProcessor()));
+		add(GENERALSTATE, SystemCommand.getFLSC("unmount", new UnmountProcessor()));
+		add(GENERALSTATE, SystemCommand.getFLSC("loadfile name name", new LoadProcessor()));
+		add(GENERALSTATE, SystemCommand.getFLSC("cp name name", new CopyProcessor()));
+		add(GENERALSTATE, SystemCommand.getFLSC("ls", new ListProcessor()));
+		add(GENERALSTATE, SystemCommand.getFLSC("cat name", new CatProcessor()));
 		add(GENERALSTATE, SystemCommand.getFLSC("showdisks", new ShowDisksProcessor())); 
 		add(GENERALSTATE, SystemCommand.getFLSC("exit", new ShutDownProcessor())); 
 		add(GENERALSTATE, SystemCommand.getFLSC("help", new HelpProcessor())); 
@@ -105,21 +86,11 @@ public class SystemCommandsProcessor extends CommandProcessor {
 		return resultsList; 
 	}
 	
-	// INNER CLASSES -- ONE FOR EACH VALID COMMAND --
 	/**
-	 *  The following are inner classes. Notice that there is one such class
-	 *  for each command. The idea is that enclose the implementation of each
-	 *  command in a particular unique place. Notice that, for each command, 
-	 *  what you need is to implement the internal method "execute(Command c)".
-	 *  In each particular case, your implementation assumes that the command
-	 *  received as parameter is of the type corresponding to the particular
-	 *  inner class. For example, the command received by the "execute(...)" 
-	 *  method inside the "LoginProcessor" class must be a "login" command. 
+	 * Creates a Disk inside the Virtual File System
+	 * @author Francisco Diaz
 	 *
 	 */
-	//////////////////////////////////////////////////////////////////////
-	///////////// DATA PROJECT 2 INNER CLASSES ///////////////////////////
-	//////////////////////////////////////////////////////////////////////
 	
 	private class CreateDiskProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
@@ -146,7 +117,11 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
-	
+	/**
+	 * Deletes a Disk from the Virtual File System
+	 * @author Francisco Diaz 
+	 *
+	 */
 	private class DeleteDiskProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
@@ -160,6 +135,11 @@ public class SystemCommandsProcessor extends CommandProcessor {
 		}
 	}
 	
+	/**
+	 * Processor that shows all the disks in the File System
+	 * @author Francisco Diaz
+	 *
+	 */
 	private class ShowDisksProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
@@ -169,8 +149,12 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
-	
-	private class MountDiskProcessor implements CommandActionHandler { 
+	/**
+	 * Processor that mounts a disk and makes it the current working disk
+	 * @author francisco
+	 *
+	 */
+	private class MountProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
 			resultsList = new ArrayList<String>();
@@ -181,8 +165,12 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
-	
-	private class UnmountDiskProcessor implements CommandActionHandler { 
+	/**
+	 * Unmount's the current working disk
+	 * @author Francisco Diaz
+	 *
+	 */
+	private class UnmountProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
 			resultsList = new ArrayList<String>(); 
@@ -191,8 +179,12 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
-	
-	private class LoadFileProcessor implements CommandActionHandler { 
+	/**
+	 * Loads an external file in the current working disk
+	 * @author Francisco Diaz
+	 *
+	 */
+	private class LoadProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
 			resultsList = new ArrayList<String>();
@@ -205,7 +197,12 @@ public class SystemCommandsProcessor extends CommandProcessor {
 		}
 	}
 	
-	private class CopyFileProcessor implements CommandActionHandler { 
+	/**
+	 * Copies one file to another
+	 * @author Francisco Diaz
+	 *
+	 */
+	private class CopyProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
 			resultsList = new ArrayList<String>();
@@ -216,8 +213,12 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
-	
-	private class ListDirectoryProcessor implements CommandActionHandler { 
+	/**
+	 * Lists all the directories inside the current directory
+	 * @author Francisco Diaz
+	 *
+	 */
+	private class ListProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
 			resultsList = new ArrayList<String>(); 
@@ -225,8 +226,12 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
-	
-	private class DisplayInternalFileProcessor implements CommandActionHandler { 
+	/**
+	 * Displays the internal content of a disk
+	 * @author francisco
+	 *
+	 */
+	private class CatProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
 			resultsList = new ArrayList<String>(); 
@@ -237,7 +242,11 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
-	
+	/**
+	 * Shutdowns the command line
+	 * @author Francisco Diaz 
+	 *
+	 */
 	private class ShutDownProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 

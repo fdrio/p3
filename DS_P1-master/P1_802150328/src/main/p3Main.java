@@ -9,6 +9,7 @@ import diskUtilities.*;
 import systemGeneralClasses.SystemController;
 
 /**
+ * Main class of the Command Line
  * @author Pedro I. Rivera-Vega
  *
  */

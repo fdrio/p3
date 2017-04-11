@@ -15,3 +15,9 @@
 /SystemCommandsProcessor$ShutDownProcessor.class
 /SystemCommandsProcessor$UnmountDiskProcessor.class
 /SystemCommandsProcessor.class
+/SystemCommandsProcessor$CatProcessor.class
+/SystemCommandsProcessor$ListProcessor.class
+/SystemCommandsProcessor$CopyProcessor.class
+/SystemCommandsProcessor$LoadProcessor.class
+/SystemCommandsProcessor$MountProcessor.class
+/SystemCommandsProcessor$UnmountProcessor.class

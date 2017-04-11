@@ -22,7 +22,7 @@ public class p3Main {
 		
 		// Initialing Shell
 		DirManager.createDiskDirectory(); // Creates the DiskUnit directory
-		DirManager.getDiskUnitNames();    // Place in memory the names of the already created DiskUnits
+		DirManager.getDiskNames();    // Place in memory the names of the already created DiskUnits
 		
 		// Processing commands
 		SystemController system = new SystemController(); 

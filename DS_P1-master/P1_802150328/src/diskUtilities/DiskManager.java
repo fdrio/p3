@@ -23,7 +23,7 @@ public class DiskManager {
 	
 	public static ArrayList<String> diskUnitNames = new ArrayList<>(); // Stores in memory the name of the disk units created.
 	public static String mountedDiskName = null;   // Name of the DiskUnit which is mounted.
-	public static DiskUnit mountedDiskUnit = null; // DiskUnit instance object of the mounted disk.
+	public static DiskUnit mountedDisk = null; // DiskUnit instance object of the mounted disk.
 	
 	
 	/**
@@ -127,7 +127,7 @@ public class DiskManager {
 			int capacity = d.getCapacity();
 			int blockSize = d.getBlockSize();
 			
-			if (mountedDiskUnit != null && mountedDiskName.equals(s))
+			if (mountedDisk != null && mountedDiskName.equals(s))
 				System.out.printf("%-22s%-22d%-22d%-22s\n",s,capacity,blockSize,"yes");
 			else
 				System.out.printf("%-22s%-22d%-22d\n",s,capacity,blockSize);
@@ -154,7 +154,7 @@ public class DiskManager {
 		try {
 			DiskUnit d = DiskUnit.mount(name);
 			mountedDiskName = name;
-			mountedDiskUnit = d;
+			mountedDisk = d;
 			System.out.println(name+" mounted successfully.");
 		} catch (NonExistingDiskException e) {
 			System.out.println(e.getMessage());
@@ -170,14 +170,14 @@ public class DiskManager {
 	 */
 	public static void unmountDisk() {
 		
-		if (mountedDiskName == null && mountedDiskUnit == null) {
+		if (mountedDiskName == null && mountedDisk == null) {
 			System.out.println("No disk is mounted.");
 			return;
 		}
 		System.out.println(mountedDiskName+" unmounted successfully.");
-		mountedDiskUnit.shutdown();
+		mountedDisk.shutdown();
 		mountedDiskName = null;
-		mountedDiskUnit = null;
+		mountedDisk = null;
 
 	}
 	/**
@@ -185,7 +185,7 @@ public class DiskManager {
 	 * @return Returns true if disk is mounted.
 	 */
 	public static boolean isDiskMounted() {
-		return (mountedDiskName != null && mountedDiskUnit != null);
+		return (mountedDiskName != null && mountedDisk != null);
 	}
 	
 	/**

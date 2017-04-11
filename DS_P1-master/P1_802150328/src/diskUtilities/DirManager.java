@@ -7,6 +7,12 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+/**
+ * Manages the Directory and is able of creating disk in the file system
+ * 
+ * @author Francisco Diaz 
+ *
+ */
 public class DirManager {
 		
 	/**
@@ -52,7 +58,7 @@ public class DirManager {
 	 */
 	public static void addUnitToDiskNames(String name) {
 		DiskManager.diskUnitNames.add(name);
-		updateDiskNames();
+		updateNames();
 	}
 	/**
 	 * Removes Disk Unit name from the Disks Name text file
@@ -60,13 +66,13 @@ public class DirManager {
 	 */
 	public static void removeUnitFromDiskNames(String name) {
 		DiskManager.diskUnitNames.remove(name);
-		updateDiskNames();
+		updateNames();
 	}
 	/**
 	 * Adds newly created Disk Unit name to the Disks Name text file
 	 * @param name Name of the disk unit
 	 */
-	public static void updateDiskNames() {
+	public static void updateNames() {
 		try {
 			createDiskNamesFile();
 			File diskNames = new File("DiskUnits", "DiskNames.txt");
@@ -88,9 +94,10 @@ public class DirManager {
 	 * Gets the disk unit names and place it into an ArrayList.
 	 * In order to keep the names in memory.
 	 */
-	public static void getDiskUnitNames() {
+	public static void getDiskNames() {
 		String line; // Hold the reader lines
 		try {
+			//                            Parent path   Name of the File
 			File diskNamesText = new File("DiskUnits", "DiskNames.txt");
 			if (!diskNamesText.exists())
 				return;

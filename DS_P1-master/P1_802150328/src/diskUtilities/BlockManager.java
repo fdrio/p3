@@ -6,9 +6,9 @@ import java.io.RandomAccessFile;
 import diskExceptions.FullDiskException;
 
 /**
- * Class for managing the free disk blocks in the unit.
- * Works as a tree-like structure. 
- * @author jahdiel
+ * Class that manages the blocks
+ * In this implementation works like a tree structure
+ * @author Francisco Diaz
  *
  */
 public class BlockManager {
@@ -16,7 +16,7 @@ public class BlockManager {
 	private final int INTEGERS_IN_BLOCK; // Amount of integers that fit inside a block, each of 4 bytes
 	
 	private DiskUnit disk;  // Disk in which the free blocks are managed.
-	private int firstFLB;   // Root of the collection of free blocks.
+	private int firstFreeBlock;   // Root of the collection of free blocks.
 	private int flIndex;    // Index of free blocks available.
 	 
 	
@@ -26,7 +26,7 @@ public class BlockManager {
 	 */
 	public BlockManager(DiskUnit d) {
 		disk = d;
-		firstFLB = d.getFirstDataBlock();
+		firstFreeBlock = d.getFirstDataBlock();
 		flIndex = d.getNextFreeBlock();
 		INTEGERS_IN_BLOCK = d.getBlockSize() / 4;
 	}
@@ -37,7 +37,7 @@ public class BlockManager {
 	 * @param d DiskUnit to be used
 	 * @return Returns Block Number of free Block
 	 */
-	public static int getFreeBN(DiskUnit d) throws FullDiskException {
+	public static int getFreeBlockNumber(DiskUnit d) throws FullDiskException {
 		int INTEGERS_IN_BLOCK = d.getBlockSize() / 4;
 		int firstFLB = d.getFirstDataBlock();
 		int flIndex = d.getNextFreeBlock();

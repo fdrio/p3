@@ -31,7 +31,7 @@ public class iNodesManager {
 	 * @param iNodeIndex Index of the i-node to get data block number.
 	 * @return Returns the data block from the i-node with index iNodeIndex
 	 */
-	public static int getDataBlockFromINode(DiskUnit d, int iNodeIndex) {
+	public static int getFirstDataBlockFromiNode(DiskUnit d, int iNodeIndex) {
 		
 		int blockSize = d.getBlockSize();
 		ArrayList<Integer> iNodeInfo = getINodePos(iNodeIndex, blockSize);
@@ -106,7 +106,7 @@ public class iNodesManager {
 		int freeINodeIdx = d.getFirstFreeINode();  // Get a free i-node index
 		if (freeINodeIdx == 0)
 			throw new Exception("No more I-Nodes available");
-		int nextFreeINodeIdx = getDataBlockFromINode(d, freeINodeIdx); 
+		int nextFreeINodeIdx = getFirstDataBlockFromiNode(d, freeINodeIdx); 
 		d.setFirstFreeINode(nextFreeINodeIdx); // Set the reference to the next free i-node into the disk (like linked list)	
 		
 		return freeINodeIdx;

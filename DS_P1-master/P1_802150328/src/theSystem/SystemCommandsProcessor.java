@@ -2,6 +2,7 @@ package theSystem;
 
 import java.util.ArrayList;
 
+import Utils.Utils;
 import diskExceptions.ExistingDiskException;
 import diskExceptions.FullDiskException;
 import diskExceptions.InvalidParameterException;
@@ -18,6 +19,7 @@ import systemGeneralClasses.VariableLengthCommand;
 import stack.IntStack;
 
 import diskUtilities.DiskManager;
+import diskUtilities.DiskUtils;
 
 
 /**
@@ -105,12 +107,18 @@ public class SystemCommandsProcessor extends CommandProcessor {
 				DiskManager.createDiskUnit(name, nBlocks, bSize);
 				resultsList.add("DiskUnit "+name+" has been created.");
 			} catch (InvalidParameterException e) {
-				if (bSize < 32)
-					resultsList.add("Invalid number: Blocksize needs to be greater than or equal to 32.");
+			if(!Utils.powerOf2(bSize)){
+				resultsList.add("Block Size must be a power of 2");
+			}
+			else if (!Utils.powerOf2(nBlocks)){
+				resultsList.add("Capacity must be a power of 2");
+			}
+			else if (bSize < 32)
+					resultsList.add("Invalid number: Blocksize needs to be >= 32 ");
 				else if (nBlocks < 0)
-					resultsList.add("Invalid number: Capacity needs to be greater than 0.");
+					resultsList.add("Invalid number: Capacity cannot be less than 0");
 				else
-					resultsList.add("Capacity and Blocksize need to be power of 2.");
+					resultsList.add("Capacity and Blocksize need to be power of 2 ");
 			} catch (ExistingDiskException e) {
 				System.out.println("Disk exist with that name already.");
 			}

@@ -24,7 +24,7 @@ Program Details:
 to manipulate files inside the virtual disk systems.
 + The main package in the program is diskUtilities:
 	
-	* Which contains the DiskUnit, VirtualDiskBlock, DiskUnitInterface, DirectoryManager, DiskManager, DiskUtils, FileManager, FreeBlockManager and INodeManager java files.
+	* Which contains the DiskUnit, VirtualDiskBlock, DirManager, DiskManager, DiskUtils, FileLoaderandManager, FreeBlockManager and INodeManager java files.
 	
 + The classes are based on reading and writing information on to the RandomAccessFiles simulating a disk system, through the virtual file system and its virtual shell.
 

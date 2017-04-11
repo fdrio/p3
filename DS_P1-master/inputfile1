@@ -1,0 +1,21 @@
+Files and Directories or Subdirectories
+A file is a sequence of blocks. The i-node corresponding to a file references the 
+first data block in the file. Each data block, if not the last block in the file, 
+has a reference (the last 4 bytes) to the next block in the file. That reference 
+is set to value 0 in the last block of each file. A directory is a file whose content 
+(the data it contains in its data blocks) are the names of each of its files, or 
+subdirectories, and a number identifying the i-node corresponding to the particular 
+file or subdirectory in the disk. For this, we have the following rules. A file name 
+is a string of no more than 20 characters (one byte each - ASCII code) long and the 
+number identifying an i-node is a 4-byte integer. 
+
+Notice that every non-empty file will contain an integer number (positive value) of 
+blocks. If block size is r, then the bytes of those blocks reserved for a file, 
+which can be used to store content of the particular file, are the first r-4 bytes; 
+the last 4 bytes in each such block stores the index of the next block that is part 
+of the file (as described in the previous paragraph). However, if the file is of size 
+s, it means that its content occupies s bytes. The number of blocks that it would 
+require is ceil(s/(r-4)). The last block of the file may have space available; which 
+is space in the disk that is available but cannot be used for any other file; it may 
+only be used for the same file it belongs to if that file eventually grows in size; 
+for example, if new content is appended to the file.

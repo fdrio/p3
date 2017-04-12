@@ -73,7 +73,7 @@ public class FileLoaderAndManager {
 				// Delete file from disk
 				deleteFileAtDisk(disk, fileDataBlock);
 				// Write new file in place of the older one
-				writeNewFileInDisk(disk, fileDataBlock, externalFileList);
+				addNewFileInDisk(disk, fileDataBlock, externalFileList);
 
 			}
 			else { // Create the new file.
@@ -88,7 +88,7 @@ public class FileLoaderAndManager {
 				// Set size in of file into its i-node
 				iNodesManager.setSizeOfINode(disk,iNodeRef, fileSize);
 				// Write file into the free block
-				writeNewFileInDisk(disk, freeBN, externalFileList);
+				addNewFileInDisk(disk, freeBN, externalFileList);
 			}
 		} catch (FullDiskException e) {
 			throw new FullDiskException(e);
@@ -143,7 +143,7 @@ public class FileLoaderAndManager {
 				// Delete file from disk
 				deleteFileAtDisk(disk, fileDataBlock);
 				// Write new file in place of the older one
-				writeNewFileInDisk(disk, fileDataBlock, content);
+				addNewFileInDisk(disk, fileDataBlock, content);
 
 			}
 			else { // Create the new file.
@@ -158,7 +158,7 @@ public class FileLoaderAndManager {
 				// Set size in of file into its i-node
 				iNodesManager.setSizeOfINode(disk,iNodeRef, inputFileSize);
 				// Write file into the free block
-				writeNewFileInDisk(disk, freeBN, content);
+				addNewFileInDisk(disk, freeBN, content);
 			} 
 		} catch (FullDiskException e) {
 			throw new FullDiskException(e);
@@ -453,15 +453,15 @@ public class FileLoaderAndManager {
 	 * @param firstFB
 	 * @param listOfVDB
 	 */
-	private static void writeNewFileInDisk(DiskUnit disk, int firstFB, ArrayList<VirtualDiskBlock> listOfVDB) {
+	private static void addNewFileInDisk(DiskUnit disk, int firstFB, ArrayList<VirtualDiskBlock> listOfVDB) {
 		try {
-			if (listOfVDB.size() < 1) { // Is full
-				System.out.println("Content could not be extracted!");
+			if (listOfVDB.size() < 1) { // Nothing 
+				System.out.println("There is nothing in the file!");
 				return;
 			}
 			VirtualDiskBlock vdb = listOfVDB.get(0);  // Get the VirtualDiskBlock from the ArrayList
 			int nextAvailableFreeBlock;  // Holds the next free block to use
-			if (listOfVDB.size() == 1)
+			if (listOfVDB.size() == 1) // Only one virtual block
 				nextAvailableFreeBlock = 0;
 			else
 				nextAvailableFreeBlock = BlockManager.getFreeBlockNumber(disk); // Look for a free block
@@ -529,6 +529,14 @@ public class FileLoaderAndManager {
 		int N = disk.getBlockSize();
 		int largestFileSize = (N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N;
 		return(fileSize <= (largestFileSize));
+	}
+	
+	private static boolean checkExceedsMaxFileSize(DiskUnit disk, ArrayList<VirtualDiskBlock>  virtualDiskBlocks){
+		int counter = 0; // Initially there is nothing
+		for(VirtualDiskBlock block : virtualDiskBlocks){
+			counter += block.getNumberOfUsedSpaces();
+		}
+		return (checkMaxFileSize(disk, counter));
 	}
 
 }

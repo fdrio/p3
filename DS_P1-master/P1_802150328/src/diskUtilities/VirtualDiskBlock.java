@@ -65,4 +65,13 @@ public class VirtualDiskBlock {
 		return elements[index];
 	}
 	
+	public int getNumberOfUsedSpaces(){
+		int counter = 0;
+		for(byte element: elements){
+			if((int)element!=0)
+				counter++;
+		}
+		return counter;
+	}
+	
 }

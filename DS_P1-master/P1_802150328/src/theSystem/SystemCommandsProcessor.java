@@ -107,7 +107,11 @@ public class SystemCommandsProcessor extends CommandProcessor {
 				DiskManager.createDiskUnit(name, nBlocks, bSize);
 				resultsList.add("DiskUnit "+name+" has been created.");
 			} catch (InvalidParameterException e) {
-			if(!Utils.powerOf2(bSize)){
+			if(!OperandValidatorUtils.isValidName(name)){
+				resultsList.add("Name is not a valid name");
+				resultsList.add("Use another name instead");
+			}
+			else if(!Utils.powerOf2(bSize)){
 				resultsList.add("Block Size must be a power of 2");
 			}
 			else if (!Utils.powerOf2(nBlocks)){

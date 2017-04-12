@@ -40,10 +40,10 @@ public class FileLoaderAndManager {
 		DiskUnit disk = DiskManager.mountedDisk;
 		int blockSize = disk.getBlockSize();
 		ArrayList<VirtualDiskBlock> externalFileList; // Will hold contents of external file
-		int rafSize; // Will hold size of the external file (measured in bytes)
+		int fileSize; // Will hold size of the external file (measured in bytes)
 		try {
-			RandomAccessFile rafToRead = new RandomAccessFile(externalFileToReadFrom, "rw");
-			rafSize = (int) rafToRead.length(); // Get size of external file in bytes
+			RandomAccessFile rafToRead = new RandomAccessFile(externalFileToReadFrom, "rw"); // read, write
+			fileSize = (int) rafToRead.length(); // Get size of external file in bytes
 			rafToRead.close();
 			// Create random access file to read data.
 			// Set the contents of the external file into an ArrayList of VirtualDiskBlocks
@@ -69,7 +69,7 @@ public class FileLoaderAndManager {
 				int iNodeFileReference = DiskUtils.getIntFromBlock(foundFileBlock, filePos+20); // Reads the integer right after the filename, which is the iNode ref
 				int fileDataBlock = iNodesManager.getFirstDataBlockFromiNode(disk, iNodeFileReference);  // Data block from the i-node
 				// Set size in of file into its i-node
-				iNodesManager.setSizeOfINode(disk, iNodeFileReference, rafSize);
+				iNodesManager.setSizeOfINode(disk, iNodeFileReference, fileSize);
 				// Delete file from disk
 				deleteFileAtDisk(disk, fileDataBlock);
 				// Write new file in place of the older one
@@ -86,7 +86,7 @@ public class FileLoaderAndManager {
 				// Set data block in i-node to the free block 
 				iNodesManager.setDataBlockToINode(disk, iNodeRef, freeBN);
 				// Set size in of file into its i-node
-				iNodesManager.setSizeOfINode(disk,iNodeRef, rafSize);
+				iNodesManager.setSizeOfINode(disk,iNodeRef, fileSize);
 				// Write file into the free block
 				writeNewFileInDisk(disk, freeBN, externalFileList);
 			}
@@ -387,7 +387,7 @@ public class FileLoaderAndManager {
 		// Capacity
 		int blockSize = disk.getBlockSize();
 		
-		// New file string into char array.
+		// New file name string into char array.
 		char[] fileCharArray = file.toCharArray();
 		if (fileCharArray.length != 20) {
 			throw new IllegalArgumentException("File name must be <= 20");
@@ -412,17 +412,18 @@ public class FileLoaderAndManager {
 		int newFileBlockNum = newFileInRoot.get(0);
 		int newFileBytePos = newFileInRoot.get(1);
 		
-		VirtualDiskBlock vdb = new VirtualDiskBlock(blockSize);
-		disk.read(newFileBlockNum, vdb);
+		VirtualDiskBlock auxVirtualBlock = new VirtualDiskBlock(blockSize); // Auxiliary Virtual Disk Block
+		disk.read(newFileBlockNum, auxVirtualBlock);
 		
 		// Write file name inside the block
 		for (int i=0; i<fileCharArray.length; i++) {
-			DiskUtils.copyCharToBlock(vdb, newFileBytePos+i, fileCharArray[i]);
+			DiskUtils.copyCharToBlock(auxVirtualBlock, newFileBytePos+i, fileCharArray[i]);
 		}
 		// Copy i-node reference into the directory.
-		DiskUtils.copyIntToBlock(vdb, newFileBytePos+20, iNodePos);
+		DiskUtils.copyIntToBlock(auxVirtualBlock, newFileBytePos+20, iNodePos);
+		
 		// Write the Virtual block back into the disk unit.
-		disk.write(newFileBlockNum, vdb);
+		disk.write(newFileBlockNum, auxVirtualBlock);
 		
 		return iNodePos; // Returns reference to the i-node of the new file.
 	}
@@ -475,6 +476,7 @@ public class FileLoaderAndManager {
 				else
 					nextAvailableFreeBlock = BlockManager.getFreeBlockNumber(disk);  // Look for a free block
 				DiskUtils.copyIntToBlock(vdb, vdb.getCapacity()-4, nextAvailableFreeBlock);  // Write free block number into last 4-bytes of block
+				
 				disk.write(freeBlock, vdb);  // Write virtual disk block into disk 
 			}
 		} catch (FullDiskException e) {
@@ -522,7 +524,7 @@ public class FileLoaderAndManager {
 	 * @param fileSize Size of the file in bytes
 	 * @return
 	 */
-	private static boolean correctFileSize(DiskUnit disk, int fileSize){
+	private static boolean checkMaxFileSize(DiskUnit disk, int fileSize){
 		//(N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N bytes 
 		int N = disk.getBlockSize();
 		int largestFileSize = (N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N;

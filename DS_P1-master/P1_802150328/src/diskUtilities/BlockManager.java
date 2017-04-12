@@ -32,30 +32,30 @@ public class BlockManager {
 	}
 	
 	/**
-	 * Obtains the next free block in the DiskUnit.
-	 * Algorithm presented by Prof. Pedro Rivera
-	 * @param d DiskUnit to be used
+	 * Obtains the next free block (the root block) in the DiskUnit.
+	 * Credit to  Prof. Pedro Rivera
+	 * @param disk DiskUnit to be used
 	 * @return Returns Block Number of free Block
 	 */
-	public static int getFreeBlockNumber(DiskUnit d) throws FullDiskException {
-		int INTEGERS_IN_BLOCK = d.getBlockSize() / 4;
-		int firstFLB = d.getFirstDataBlock();
-		int flIndex = d.getNextFreeBlock();
+	public static int getFreeBlockNumber(DiskUnit disk) throws FullDiskException {
+		int intergersInBlock = disk.getBlockSize() / 4;
+		int firstFLB = disk.getFirstDataBlock();
+		int flIndex = disk.getNextFreeBlock();
 		int bn;
 		
 		if (firstFLB == 0)
 			throw new FullDiskException("Disk is full.");
 		// disk has space
 		if (flIndex != 0) {
-			bn = getIntInsideBlock(d, firstFLB, flIndex);
+			bn = getIntInsideBlock(disk, firstFLB, flIndex);
 			flIndex--;
-			d.setNextFreeBlock(flIndex);
+			disk.setNextFreeBlock(flIndex);
 		} else {   // the current root node in the tree is the one to be returned
 			bn = firstFLB;
-			firstFLB = getIntInsideBlock(d, firstFLB, 0);
-			d.setFirstDataBlock(firstFLB);
-			flIndex = INTEGERS_IN_BLOCK-1;
-			d.setNextFreeBlock(flIndex);
+			firstFLB = getIntInsideBlock(disk, firstFLB, 0);
+			disk.setFirstDataBlock(firstFLB);
+			flIndex = intergersInBlock-1;
+			disk.setNextFreeBlock(flIndex);
 		}
 		
 		return bn;  // the index of the free block that is taken
@@ -127,6 +127,8 @@ public class BlockManager {
 			registerFB(disk, i);
 		}
 	}
+	
+	
 	
 	
 }

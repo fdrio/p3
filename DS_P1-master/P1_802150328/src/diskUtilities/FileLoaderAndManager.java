@@ -69,7 +69,7 @@ public class FileLoaderAndManager {
 				int iNodeFileReference = DiskUtils.getIntFromBlock(foundFileBlock, filePos+20); // Reads the integer right after the filename, which is the iNode ref
 				int fileDataBlock = iNodesManager.getFirstDataBlockFromiNode(disk, iNodeFileReference);  // Data block from the i-node
 				// Set size in of file into its i-node
-				iNodesManager.setSizeOfINode(disk, iNodeFileReference, fileSize);
+				iNodesManager.setSizeOfiNode(disk, iNodeFileReference, fileSize);
 				// Delete file from disk
 				deleteFileAtDisk(disk, fileDataBlock);
 				// Write new file in place of the older one
@@ -86,7 +86,7 @@ public class FileLoaderAndManager {
 				// Set data block in i-node to the free block 
 				iNodesManager.setDataBlockToINode(disk, iNodeRef, freeBN);
 				// Set size in of file into its i-node
-				iNodesManager.setSizeOfINode(disk,iNodeRef, fileSize);
+				iNodesManager.setSizeOfiNode(disk,iNodeRef, fileSize);
 				// Write file into the free block
 				addNewFileInDisk(disk, freeBN, externalFileList);
 			}
@@ -121,7 +121,7 @@ public class FileLoaderAndManager {
 		int inputFileBytePos = inputFileInfo.get(1);   // Starting byte position of the file name
 		// Get data block from i-node
 		int inputINodeRef = DiskUtils.getIntFromBlock(vdb, inputFileBytePos+20);
-		int inputFileSize = iNodesManager.getSizeFromINode(disk, inputINodeRef);
+		int inputFileSize = iNodesManager.getSizeiNode(disk, inputINodeRef);
 		int inputFileDataBlock = iNodesManager.getFirstDataBlockFromiNode(disk, inputINodeRef);
 		
 		// Get content of input file
@@ -139,7 +139,7 @@ public class FileLoaderAndManager {
 				int iNodeRef = DiskUtils.getIntFromBlock(foundFileBlock, fileBytePos+20); // Reads the integer right after the filename, which is the iNode ref
 				int fileDataBlock = iNodesManager.getFirstDataBlockFromiNode(disk, iNodeRef);  // Data block from the i-node
 				// Set size of file into its i-node
-				iNodesManager.setSizeOfINode(disk, iNodeRef, inputFileSize);
+				iNodesManager.setSizeOfiNode(disk, iNodeRef, inputFileSize);
 				// Delete file from disk
 				deleteFileAtDisk(disk, fileDataBlock);
 				// Write new file in place of the older one
@@ -156,7 +156,7 @@ public class FileLoaderAndManager {
 				// Set data block in i-node to the free block 
 				iNodesManager.setDataBlockToINode(disk, iNodeRef, freeBN);
 				// Set size in of file into its i-node
-				iNodesManager.setSizeOfINode(disk,iNodeRef, inputFileSize);
+				iNodesManager.setSizeOfiNode(disk,iNodeRef, inputFileSize);
 				// Write file into the free block
 				addNewFileInDisk(disk, freeBN, content);
 			} 
@@ -336,7 +336,7 @@ public class FileLoaderAndManager {
 			}
 			String filename = new String(fileCharArray);
 			int iNodeRef = DiskUtils.getIntFromBlock(vdb, fileBytePos+20);
-			String filesize = Integer.toString(iNodesManager.getSizeFromINode(d, iNodeRef));
+			String filesize = Integer.toString(iNodesManager.getSizeiNode(d, iNodeRef));
 			filename += " "+filesize;
 			filesInDir.add(filename);
 			
@@ -402,7 +402,7 @@ public class FileLoaderAndManager {
 		// Obtain free valid i-node position
 		int iNodePos;
 		try {
-			iNodePos = iNodesManager.getFreeINode(disk);
+			iNodePos = iNodesManager.getFreeiNode(disk);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			throw new FullDiskException();  // Could not get more i-node
@@ -513,30 +513,36 @@ public class FileLoaderAndManager {
 	private static void clearDiskBlock(DiskUnit disk, int blockNum, VirtualDiskBlock vdb) {
 		
 		for (int i=0; i<vdb.getCapacity(); i++) {
-			vdb.setElement(i, (byte) 0); // set every byte to 0 in the block
+			vdb.setElement(i, (byte) 0); // set every byte to 0 (empty) in the block
 		}
-		disk.write(blockNum, vdb); // Write the wiped block into the disk.
+		disk.write(blockNum, vdb); // Write the emptied block into the disk.
 		
 	}
 	/**
-	 * 
+	 * Verifies if the size of the file does not exceed the maximum file size
 	 * @param disk disk to be used
 	 * @param fileSize Size of the file in bytes
-	 * @return
+	 * @return Returns true if and only the file size is less than or equal 
+	 * to the maximum size allowed for a file in this implementation
 	 */
 	private static boolean checkMaxFileSize(DiskUnit disk, int fileSize){
-		//(N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N bytes 
+		//(N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N bytes where N is the size of the block
 		int N = disk.getBlockSize();
-		int largestFileSize = (N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N;
+		int largestFileSize = (N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N ; 
 		return(fileSize <= (largestFileSize));
 	}
 	
-	private static boolean checkExceedsMaxFileSize(DiskUnit disk, ArrayList<VirtualDiskBlock>  virtualDiskBlocks){
-		int counter = 0; // Initially there is nothing
+	private static boolean checkExceedsMaxFileSize (DiskUnit disk, ArrayList<VirtualDiskBlock>  virtualDiskBlocks, int initial
+			){
+		int counter = initial; // Initially there is nothing
 		for(VirtualDiskBlock block : virtualDiskBlocks){
 			counter += block.getNumberOfUsedSpaces();
 		}
 		return (checkMaxFileSize(disk, counter));
+	}
+	
+	private static void reserveRootBlock(DiskUnit disk){
+		int root = BlockManager.getFreeBlockNumber(disk);
 	}
 
 }

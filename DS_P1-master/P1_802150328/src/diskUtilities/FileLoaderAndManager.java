@@ -37,7 +37,7 @@ public class FileLoaderAndManager {
 		fileName = DiskUtils.formatFileName(fileName);
 		
 		// Place file content inside an ArrayList of VirtualDiskBlock
-		DiskUnit disk = DiskManager.mountedDisk;
+		DiskUnit disk = DiskManager.currentMountedDisk;
 		int blockSize = disk.getBlockSize();
 		ArrayList<VirtualDiskBlock> externalFileList; // Will hold contents of external file
 		int fileSize; // Will hold size of the external file (measured in bytes)
@@ -108,7 +108,7 @@ public class FileLoaderAndManager {
 		inputFile = DiskUtils.formatFileName(inputFile);
 		file = DiskUtils.formatFileName(file);
 		// Mounted disk unit 
-		DiskUnit disk = DiskManager.mountedDisk;
+		DiskUnit disk = DiskManager.currentMountedDisk;
 		// Block Number of the root directory
 		int rootBlockNum = iNodesManager.getFirstDataBlockFromiNode(disk, 0);
 		// Get input file from root
@@ -172,7 +172,7 @@ public class FileLoaderAndManager {
 	 * information about each file stored in that file. 
 	 */
 	public static void listDir() {
-		DiskUnit disk = DiskManager.mountedDisk;
+		DiskUnit disk = DiskManager.currentMountedDisk;
 		
 		// Write the title
 		System.out.println();
@@ -194,7 +194,7 @@ public class FileLoaderAndManager {
 		// Format file string to fit 20 bytes
 		file = DiskUtils.formatFileName(file);
 		// Mounted disk unit 
-		DiskUnit disk = DiskManager.mountedDisk;
+		DiskUnit disk = DiskManager.currentMountedDisk;
 		// Block Number of the root directory
 		int rootBlockNum = iNodesManager.getFirstDataBlockFromiNode(disk, 0);
 		// Get file from root

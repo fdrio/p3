@@ -18,14 +18,14 @@ public class DiskManager {
 	 * Class which manages the disks and files stored in the disk unit. 
 	 * @author Francisco Diaz
 	 */
-	
+
 	public static final int i_NODE_SIZE = 9; // Bytes per i-node (the size it occupies)
-	
+
 	public static ArrayList<String> diskUnitNames = new ArrayList<>(); // Stores in memory the name of the disk units created.
 	public static String nameOfMountedDisk = null;   // Name of the DiskUnit which is mounted.
 	public static DiskUnit currentMountedDisk = null; // DiskUnit instance object of the mounted disk.
-	
-	
+
+
 	/**
 	 * Creates a new disk unit with the provided parameters.
 	 * It also separates disks blocks for the i-nodes.
@@ -35,9 +35,9 @@ public class DiskManager {
 	 */
 	public static void createDiskUnit(String name, int capacity, int blockSize) 
 			throws ExistingDiskException, InvalidParameterException {
-		
+
 		//TODO: create DiskNames text file if doesn't exist
-		
+
 		// Verifying DiskUnit folder exists and add Unit to DiskNames text file
 		DirManager.createDiskDirectory();	
 		try {
@@ -48,13 +48,13 @@ public class DiskManager {
 		}
 		// Mount the disk unit in order to create its root directory.
 		DiskUnit d = DiskUnit.mount(name);
-		
+
 		// Set the root directory
 		setRootDirectory(d, blockSize);
-		
+
 		// Initialize the free block structure
 		initializeFreeBlocks(d);
-		
+
 		d.shutdown(); // Shutdown the disk
 	}
 	/**
@@ -65,7 +65,7 @@ public class DiskManager {
 	private static void initializeFreeBlocks(DiskUnit d) {
 		BlockManager.initializeFreeBlocks(d);
 	}
-	
+
 	/**
 	 * Sets the root directory in the first data block. And sets the i-node 0's first block
 	 * to refer to the root directory disk block.
@@ -90,7 +90,7 @@ public class DiskManager {
 		// Write into the disk the virtual disk block with updated reference to the root directory data block
 		d.write(rootINodePos, firstBlockRef);
 	}
-	
+
 	/**
 	 * Deletes a disk unit with the provided name.
 	 * @param name Name of the disk unit to be eliminated.
@@ -105,9 +105,9 @@ public class DiskManager {
 		System.out.println(name+" has been removed.");
 		unitToDelete.delete();
 		DirManager.removeUnitFromDiskNames(name);
-		
+
 	}
-	
+
 	/**
 	 * Shows the list of disk units that are active in the system. 
 	 * For each disk unit, it displays its name, the number of blocks 
@@ -115,12 +115,12 @@ public class DiskManager {
 	 * if the corresponding disk unit is currently mounted or not-mounted.
 	 */
 	public static void showDiskUnits() {
-		
+
 		if (DiskManager.diskUnitNames.isEmpty()) {
 			System.out.println("No disk units in the file system.");
 			return;
 		}
-		
+
 		System.out.println("---------------------------------------------------------------------------");
 		for (String s : DiskManager.diskUnitNames) {
 			DiskUnit d = DiskUnit.mount(s);
@@ -132,7 +132,7 @@ public class DiskManager {
 			else
 				System.out.println("Name : "+s+"  Capacity:  "+capacity+"  BlockSize:  "+blockSize+"  Mounted: NO");
 
-			
+
 			d.shutdown();
 		}
 		System.out.println();
@@ -147,7 +147,7 @@ public class DiskManager {
 	 * @param name Name of the disk unit to mount.
 	 */
 	public static void mountDisk(String name) {
-		
+
 		if (nameOfMountedDisk != null) {
 			System.out.println("There is already a mounted disk. Unmount DiskUnit "+nameOfMountedDisk+" first.");
 			return;
@@ -160,7 +160,7 @@ public class DiskManager {
 		} catch (NonExistingDiskException e) {
 			System.out.println(e.getMessage());
 		}
-		
+
 	}
 	/**
 	 * The successful execution of this command unmounts the current working disk unit, if any. 
@@ -170,7 +170,7 @@ public class DiskManager {
 	 * have no current disk unit. In order to have one again, the mount command needs to be executed. 
 	 */
 	public static void unmountDisk() {
-		
+
 		if (nameOfMountedDisk == null && currentMountedDisk == null) {
 			System.out.println("No disk is mounted.");
 			return;
@@ -188,7 +188,7 @@ public class DiskManager {
 	public static boolean isDiskMounted() {
 		return (nameOfMountedDisk != null && currentMountedDisk != null);
 	}
-	
+
 	/**
 	 * Attempts to read a new file into the current directory in the current 
 	 * working disk unit. Wrapper to the FileManager loadFile method.
@@ -208,9 +208,7 @@ public class DiskManager {
 	}
 	/**
 	 * List the names and sizes of all the files and directories that are part 
-	 * of the current directory. Notice that this command will read the content 
-	 * of the file corresponding to the directory and display the specified 
-	 * information about each file stored in that file.
+	 * of the current directory. 
 	 * Prints the filename and its size in bytes.
 	 */
 	public static void listDir() {
@@ -232,9 +230,7 @@ public class DiskManager {
 		FileLoaderAndManager.catFile(file);
 	}
 	/**
-	 * Copies one internal file to another internal file. It works similar to the 
-	 * command loadfile, but this time the input file (name given first) is also an 
-	 * internal file that must be a data file in the current directory.
+	 * Copies one internal file to another internal file. 
 	 * @param inputFile Internal file to copy from
 	 * @param file Internal file to copy content into
 	 */
@@ -248,10 +244,10 @@ public class DiskManager {
 		} catch (FullDiskException e) {
 			return;
 		}
-	
-	}
-	
-	
 
-	
+	}
+
+
+
+
 }

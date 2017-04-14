@@ -75,7 +75,18 @@ public class SystemCommandsProcessor extends CommandProcessor {
 		add(GENERALSTATE, SystemCommand.getFLSC("ls", new ListProcessor()));
 		add(GENERALSTATE, SystemCommand.getFLSC("cat name", new CatProcessor()));
 		add(GENERALSTATE, SystemCommand.getFLSC("showdisks", new ShowDisksProcessor())); 
+		add(GENERALSTATE, SystemCommand.getFLSC("cd dir_name", new cd())); 
+		add(GENERALSTATE, SystemCommand.getFLSC("mkdir dir_name", new mkdir())); 
+		add(GENERALSTATE, SystemCommand.getFLSC("rmdir dir_name", new rmdir())); 
+		add(GENERALSTATE, SystemCommand.getFLSC("drmdir dir_name", new drmdir()));
+		add(GENERALSTATE, SystemCommand.getFLSC("rm file_name", new rm()));
+		add(GENERALSTATE, SystemCommand.getFLSC("find name", new find()));
+		add(GENERALSTATE, SystemCommand.getFLSC("append ext_file_name  file_name", new append()));
 		add(GENERALSTATE, SystemCommand.getFLSC("exit", new ShutDownProcessor())); 
+		
+		
+		
+		//cd mkdir rmdir drmdir rm find append
 		add(GENERALSTATE, SystemCommand.getFLSC("help", new HelpProcessor())); 
 				
 		
@@ -93,7 +104,7 @@ public class SystemCommandsProcessor extends CommandProcessor {
 	 * @author Francisco Diaz
 	 *
 	 */
-	
+
 	private class CreateDiskProcessor implements CommandActionHandler { 
 		public ArrayList<String> execute(Command c) { 
 
@@ -252,6 +263,79 @@ public class SystemCommandsProcessor extends CommandProcessor {
 			return resultsList; 
 		}
 	}
+	
+////////////////////////////////////////////////////////////////////////////////////////////////
+//	                                 Commands Added in P3                                     //
+////////////////////////////////////////////////////////////////////////////////////////////////
+	private class cd implements CommandActionHandler{
+
+		@Override
+		public ArrayList<String> execute(Command c) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	//cd mkdir rmdir drmdir rm find append
+	private class mkdir implements CommandActionHandler{
+
+		@Override
+		public ArrayList<String> execute(Command c) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	private class rmdir implements CommandActionHandler{
+
+		@Override
+		public ArrayList<String> execute(Command c) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
+	private class drmdir implements CommandActionHandler{
+
+		@Override
+		public ArrayList<String> execute(Command c) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	
+	private class rm implements CommandActionHandler{
+
+		@Override
+		public ArrayList<String> execute(Command c) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	private class find implements CommandActionHandler{
+
+		@Override
+		public ArrayList<String> execute(Command c) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+		
+	}
+	private class append implements CommandActionHandler{
+
+		@Override
+		public ArrayList<String> execute(Command c) {
+			return null;
+			
+		}
+		
+	}
+////////////////////////////////////////////////////////////////////////////////////////////////
+//                                   Commands Added in P3                                     //
+////////////////////////////////////////////////////////////////////////////////////////////////
 	/**
 	 * Shutdowns the command line
 	 * @author Francisco Diaz 

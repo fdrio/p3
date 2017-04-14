@@ -21,3 +21,10 @@
 /SystemCommandsProcessor$LoadProcessor.class
 /SystemCommandsProcessor$MountProcessor.class
 /SystemCommandsProcessor$UnmountProcessor.class
+/SystemCommandsProcessor$append.class
+/SystemCommandsProcessor$cd.class
+/SystemCommandsProcessor$drmdir.class
+/SystemCommandsProcessor$find.class
+/SystemCommandsProcessor$mkdir.class
+/SystemCommandsProcessor$rm.class
+/SystemCommandsProcessor$rmdir.class

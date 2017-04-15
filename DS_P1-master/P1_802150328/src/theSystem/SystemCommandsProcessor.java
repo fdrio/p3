@@ -83,10 +83,6 @@ public class SystemCommandsProcessor extends CommandProcessor {
 		add(GENERALSTATE, SystemCommand.getFLSC("find name", new find()));
 		add(GENERALSTATE, SystemCommand.getFLSC("append ext_file_name  file_name", new append()));
 		add(GENERALSTATE, SystemCommand.getFLSC("exit", new ShutDownProcessor())); 
-		
-		
-		
-		//cd mkdir rmdir drmdir rm find append
 		add(GENERALSTATE, SystemCommand.getFLSC("help", new HelpProcessor())); 
 				
 		

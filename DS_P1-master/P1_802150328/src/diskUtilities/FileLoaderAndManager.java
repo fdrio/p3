@@ -21,8 +21,8 @@ public class FileLoaderAndManager {
 	 * @param fileName Name of the new file
 	 */
 	public static void load(String externalFileToReadFrom, String fileName) throws FullDiskException{
-		
-		
+
+
 		File fileToRead = new File(externalFileToReadFrom); // file to read from
 		if (!fileToRead.exists()) {
 			System.out.println("There is no such file named :"+externalFileToReadFrom);
@@ -30,12 +30,12 @@ public class FileLoaderAndManager {
 			return;
 		}	
 		//File newFile = new File(file);  // file to copy into inside the disk unit
-		
+
 		// TODO: Verify disk has enough space.
-		
+
 		// Format file string to fit 20 bytes
 		fileName = DiskUtils.formatFileName(fileName);
-		
+
 		// Place file content inside an ArrayList of VirtualDiskBlock
 		DiskUnit disk = DiskManager.currentMountedDisk;
 		int blockSize = disk.getBlockSize();
@@ -48,7 +48,7 @@ public class FileLoaderAndManager {
 			// Create random access file to read data.
 			// Set the contents of the external file into an ArrayList of VirtualDiskBlocks
 			externalFileList = DiskUtils.setExtFileContentToVDBs(externalFileToReadFrom, blockSize);  
-			
+
 		} catch (FileNotFoundException e) {
 			System.err.println("Unable to open external file.");
 			return;
@@ -56,7 +56,7 @@ public class FileLoaderAndManager {
 			System.err.println("Unable to read external file.");
 			return;
 		} 
-	
+
 		// Block Number of the root directory
 		int rootBlockNumber = iNodesManager.getFirstDataBlockFromiNode(disk, 0);
 		// Verify if File already exists.
@@ -93,7 +93,7 @@ public class FileLoaderAndManager {
 		} catch (FullDiskException e) {
 			throw new FullDiskException(e);
 		}	
-		
+
 	}
 	/**
 	 * Copies one internal file to another internal file. It works similar to the 
@@ -103,7 +103,7 @@ public class FileLoaderAndManager {
 	 * @param file Internal file to copy content into
 	 */
 	public static void copyFile(String inputFile, String file) throws FullDiskException {
-		
+
 		// Format file strings to fit 20 bytes
 		inputFile = DiskUtils.formatFileName(inputFile);
 		file = DiskUtils.formatFileName(file);
@@ -123,14 +123,14 @@ public class FileLoaderAndManager {
 		int inputINodeRef = DiskUtils.getIntFromBlock(vdb, inputFileBytePos+20);
 		int inputFileSize = iNodesManager.getSizeiNode(disk, inputINodeRef);
 		int inputFileDataBlock = iNodesManager.getFirstDataBlockFromiNode(disk, inputINodeRef);
-		
+
 		// Get content of input file
 		ArrayList<VirtualDiskBlock> content = DiskUtils.setFileContentToVDBs(disk, inputFileDataBlock);
-		
-		
+
+
 		// Verify if File already exists.
 		ArrayList<Integer> foundFile = findFileInDir(disk, file, rootBlockNum);
-		
+
 		try {
 			if (foundFile != null) { // If found the file erases the foundFile and creates it with new content.
 				VirtualDiskBlock foundFileBlock = DiskUtils.copyBlockToVDB(disk, foundFile.get(0));
@@ -163,7 +163,7 @@ public class FileLoaderAndManager {
 		} catch (FullDiskException e) {
 			throw new FullDiskException(e);
 		}
-		
+
 	}
 	/**
 	 * List the names and sizes of all the files and directories that are part 
@@ -173,7 +173,7 @@ public class FileLoaderAndManager {
 	 */
 	public static void listDir() {
 		DiskUnit disk = DiskManager.currentMountedDisk;
-		
+
 		// Write the title
 		System.out.println();
 		System.out.println("Filename:           Size (Bytes)");
@@ -182,7 +182,7 @@ public class FileLoaderAndManager {
 		int rootNumber = iNodesManager.getFirstDataBlockFromiNode(disk, 0);
 		//System.out.println("Root Number: "+rootNumber);
 		printFilesFromDir(disk, rootNumber); 
-		
+
 		System.out.println();
 	}
 	/**
@@ -190,7 +190,7 @@ public class FileLoaderAndManager {
 	 * @param file Name of file to be displayed.
 	 */
 	public static void catFile(String file) {
-		
+
 		// Format file string to fit 20 bytes
 		file = DiskUtils.formatFileName(file);
 		// Mounted disk unit 
@@ -208,15 +208,15 @@ public class FileLoaderAndManager {
 		// Get data block from i-node
 		int iNodeRef = DiskUtils.getIntFromBlock(vdb, fileBytePos+20);
 		int fileDataBlock = iNodesManager.getFirstDataBlockFromiNode(disk, iNodeRef);
-		
+
 		// Get content from file
 		ArrayList<VirtualDiskBlock> content = DiskUtils.setFileContentToVDBs(disk, fileDataBlock);
-		
+
 		// Print the file content
 		System.out.println();
 		DiskUtils.printContentOfVDBlocks(content);
 	}
-	
+
 	/**
 	 * Provides ArrayList with block number in first index and free byte position in second index.
 	 * @param d DiskUnit in use
@@ -225,13 +225,13 @@ public class FileLoaderAndManager {
 	 * @return ArrayList with block number in first index and free byte position in second index.
 	 */
 	public static ArrayList<Integer> getFreePosInDirectory(DiskUnit d, int firstDirBlockNum, int blockSize) throws FullDiskException {
-		
+
 		int usableBytes = blockSize - 4;
 		int filesPerBlock = usableBytes / 24;
 		ArrayList<Integer> freeDirArray = new ArrayList<>(); // Holds the free byte position to write into 
-		
+
 		ArrayList<Integer> dirBlockNums = allFileBlockNums(d, firstDirBlockNum);
-		
+
 		int blockNum = dirBlockNums.get(dirBlockNums.size()-1); // The last block number in the list
 		VirtualDiskBlock lastDataBlock = DiskUtils.copyBlockToVDB(d, blockNum); // last data block in the directory
 		for (int i=1; i <= filesPerBlock; i++) {
@@ -254,10 +254,10 @@ public class FileLoaderAndManager {
 				throw new FullDiskException(e);
 			}
 		}
-			
+
 		return freeDirArray;
 	}
-	
+
 	/**
 	 * Find if file is inside the directory. Returns the block number 
 	 * and byte position in the block if it is found. If not found returns null. 
@@ -289,16 +289,16 @@ public class FileLoaderAndManager {
 	 * @return Integer with the byte position of the filename. 
 	 */
 	public static Integer findFileInDirBlock(VirtualDiskBlock vdb, String file) {
-		
+
 		int usableBytes = vdb.getCapacity() - 4;
 		int filesPerBlock = usableBytes / 24;
-		
+
 		for (int i=1; i <= filesPerBlock; i++) {
-			
+
 			int iNodeIdx = DiskUtils.getIntFromBlock(vdb, (i*24)-4); // i-node index inside the directory, after the filename
 			if (iNodeIdx == 0)   // byte position = blockNum*blockSize+((i*24)-24)
 				break;
-			
+
 			char[] fileCharArray = new char[20];
 			int fileBytePos = (i*24) - 24;
 			for (int j=0; j<20; j++) {
@@ -318,17 +318,17 @@ public class FileLoaderAndManager {
 	 * @return Returns list of strings with information about the files in a directory block.
 	 */
 	private static ArrayList<String> filesInDirBlock(DiskUnit d, VirtualDiskBlock vdb) {
-		
+
 		int usableBytes = vdb.getCapacity() - 4;
 		int filesPerBlock = usableBytes / 24;
 		ArrayList<String> filesInDir = new ArrayList<>();
-		
+
 		for (int i=1; i <= filesPerBlock; i++) {
-			
+
 			int iNodeIdx = DiskUtils.getIntFromBlock(vdb, (i*24)-4); // i-node index inside the directory, after the filename
 			if (iNodeIdx == 0)   // If no reference to i-node is found, no file is stored. Byte position = blockNum*blockSize+((i*24)-24)
 				break;
-			
+
 			char[] fileCharArray = new char[20];
 			int fileBytePos = (i*24) - 24;   // Starting byte position of the file name
 			for (int j=0; j<20; j++) {
@@ -339,11 +339,11 @@ public class FileLoaderAndManager {
 			String filesize = Integer.toString(iNodesManager.getSizeiNode(d, iNodeRef));
 			filename += " "+filesize;
 			filesInDir.add(filename);
-			
+
 		}
 		return filesInDir;
 	}
-	
+
 	/**
 	 * Returns an ArrayList with all the block numbers of a file or directory.
 	 * @param d DiskUnit to be used.
@@ -351,16 +351,16 @@ public class FileLoaderAndManager {
 	 * @return Returns an ArrayList with all the block numbers of a file or directory.
 	 */
 	public static ArrayList<Integer> allFileBlockNums(DiskUnit d, int firstFileBlockNum) {
-		
+
 		int blockSize = d.getBlockSize();
 		int lastInt = blockSize - 4;
 		ArrayList<Integer> dirBlockNums = new ArrayList<>(); 
-		
+
 		VirtualDiskBlock vdb = new VirtualDiskBlock(blockSize);
 		d.read(firstFileBlockNum, vdb);
 		int nextBlockInt = DiskUtils.getIntFromBlock(vdb, lastInt); // Read the last 4 bytes in the block
 		dirBlockNums.add(firstFileBlockNum);
-		
+
 		while (nextBlockInt != 0) {
 			dirBlockNums.add(nextBlockInt);
 			vdb = new VirtualDiskBlock(blockSize);
@@ -369,7 +369,7 @@ public class FileLoaderAndManager {
 		}
 		return dirBlockNums;
 	}
-	
+
 	/**
 	 * Write the file name and i-node reference into a directory.
 	 * Writes file name right after the last file name in directory.
@@ -383,21 +383,21 @@ public class FileLoaderAndManager {
 	 */
 	public static int  writeFileInDirectory(DiskUnit disk, String file, int blockNum) 
 			throws IllegalArgumentException, FullDiskException {
-		
+
 		// Capacity
 		int blockSize = disk.getBlockSize();
-		
+
 		// New file name string into char array.
 		char[] fileCharArray = file.toCharArray();
 		if (fileCharArray.length != 20) {
 			throw new IllegalArgumentException("File name must be <= 20");
 		}
-			
+
 		// Get free byte position in directory
 		ArrayList<Integer> newFileInRoot = getFreePosInDirectory(disk, blockNum, blockSize);
-		
+
 		// TODO: Verify file fits into new block;
-		
+
 		// Write file name inside root and assign a free i-node to reference it.
 		// Obtain free valid i-node position
 		int iNodePos;
@@ -411,20 +411,20 @@ public class FileLoaderAndManager {
 		// Write file name and node index into root;
 		int newFileBlockNum = newFileInRoot.get(0);
 		int newFileBytePos = newFileInRoot.get(1);
-		
+
 		VirtualDiskBlock auxVirtualBlock = new VirtualDiskBlock(blockSize); // Auxiliary Virtual Disk Block
 		disk.read(newFileBlockNum, auxVirtualBlock);
-		
+
 		// Write file name inside the block
 		for (int i=0; i<fileCharArray.length; i++) {
 			DiskUtils.copyCharToBlock(auxVirtualBlock, newFileBytePos+i, fileCharArray[i]);
 		}
 		// Copy i-node reference into the directory.
 		DiskUtils.copyIntToBlock(auxVirtualBlock, newFileBytePos+20, iNodePos);
-		
+
 		// Write the Virtual block back into the disk unit.
 		disk.write(newFileBlockNum, auxVirtualBlock);
-		
+
 		return iNodePos; // Returns reference to the i-node of the new file.
 	}
 	/**
@@ -433,9 +433,9 @@ public class FileLoaderAndManager {
 	 * @param dirBlockNum Number of the first data block of the directory
 	 */
 	private static void printFilesFromDir(DiskUnit disk, int dirBlockNum) {
-		
+
 		ArrayList<Integer> dirBlockNums = allFileBlockNums(disk, dirBlockNum);
-		
+
 		for (Integer blockNum : dirBlockNums) {		
 			System.out.println("Number of directory block numbers: "+dirBlockNums.size());
 			VirtualDiskBlock vdb = DiskUtils.copyBlockToVDB(disk, blockNum);
@@ -446,7 +446,7 @@ public class FileLoaderAndManager {
 			}
 		}
 	}
-	
+
 	/**
 	 * Writes the new file inside the specified disk .
 	 * @param disk
@@ -476,26 +476,26 @@ public class FileLoaderAndManager {
 				else
 					nextAvailableFreeBlock = BlockManager.getFreeBlockNumber(disk);  // Look for a free block
 				DiskUtils.copyIntToBlock(vdb, vdb.getCapacity()-4, nextAvailableFreeBlock);  // Write free block number into last 4-bytes of block
-				
+
 				disk.write(freeBlock, vdb);  // Write virtual disk block into disk 
 			}
 		} catch (FullDiskException e) {
-				System.out.println(e.getMessage());
-				throw new FullDiskException();
+			System.out.println(e.getMessage());
+			throw new FullDiskException();
 		}
-		
-		
 
-		}
+
+
+	}
 	/**
 	 * Deletes a file from the disk by wiping its data blocks.
 	 * @param d DiskUnit in use
 	 * @param firstFreeBlock Number of the first data block in the file.
 	 */
 	private static void deleteFileAtDisk(DiskUnit d, int firstFreeBlock) {
-		
+
 		ArrayList<Integer> fileBlockNums = allFileBlockNums(d, firstFreeBlock);
-		
+
 		for (int i=0; i<fileBlockNums.size(); i++) {
 			int blockNum = fileBlockNums.get(i);
 			VirtualDiskBlock vdb = DiskUtils.copyBlockToVDB(d, blockNum);
@@ -511,39 +511,24 @@ public class FileLoaderAndManager {
 	 * @param vdb
 	 */
 	private static void clearDiskBlock(DiskUnit disk, int blockNum, VirtualDiskBlock vdb) {
-		
+
 		for (int i=0; i<vdb.getCapacity(); i++) {
 			vdb.setElement(i, (byte) 0); // set every byte to 0 (empty) in the block
 		}
 		disk.write(blockNum, vdb); // Write the emptied block into the disk.
-		
+
 	}
 	/**
-	 * Verifies if the size of the file does not exceed the maximum file size
-	 * @param disk disk to be used
-	 * @param fileSize Size of the file in bytes
-	 * @return Returns true if and only the file size is less than or equal 
-	 * to the maximum size allowed for a file in this implementation
+	 * Method returns the largest possible file size
+	 * @param disk The disk itself to be analyzed
+	 * @return Returns the largest possible file given the properties of the disk
 	 */
-	private static boolean checkMaxFileSize(DiskUnit disk, int fileSize){
-		//(N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N bytes where N is the size of the block
-		int N = disk.getBlockSize();
-		int largestFileSize = (N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N ; 
-		return(fileSize <= (largestFileSize));
+	private static int getMaxFileSizeFromDisk(DiskUnit disk){
+		int N = disk.getBlockSize(); // Where N is the BlockSize 
+		int maxFileSize = (N-20) + 3*N + (N/4)*N + (N/4)*(N/4)*N ;
+		return maxFileSize;
 	}
 	
-	private static boolean checkExceedsMaxFileSize (DiskUnit disk, ArrayList<VirtualDiskBlock>  virtualDiskBlocks, int initial
-			){
-		int counter = initial; // Initially there is nothing
-		for(VirtualDiskBlock block : virtualDiskBlocks){
-			counter += block.getNumberOfUsedSpaces();
-		}
-		return (checkMaxFileSize(disk, counter));
-	}
 	
-	private static void reserveRootBlock(DiskUnit disk){
-		int root = BlockManager.getFreeBlockNumber(disk);
-	}
-
 }
 

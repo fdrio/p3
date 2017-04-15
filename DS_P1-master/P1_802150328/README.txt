@@ -5,7 +5,7 @@ CIIC 4020 - Data Structures
 Project Author
 ------------------
 + Francisco Diaz
-+ 802-15-0328
++ 802-15-2172
 + Inst. Kelvin Roche
 + Prof. Pedro Rivera
 

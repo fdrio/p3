@@ -32,7 +32,7 @@ to manipulate files inside the virtual disk systems.
 ------------------------------
 Instructions for Eclipse:
 ------------------------------
-+ First unzip the file: P2_4035_802150328_162.zip
++ First unzip the file: P2_4035_802152172_162.zip
 + Open the project in Eclipse.
 + Make sure the Eclipse encoding is set to UTF-8.	
 + Run p3Main.java file inside the main package.
